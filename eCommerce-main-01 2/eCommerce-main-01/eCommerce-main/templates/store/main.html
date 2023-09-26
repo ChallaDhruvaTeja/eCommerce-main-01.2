@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+           <title>e-Commerce</title>
+
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+            <link rel="shortcut icon" type="images" href="{% static 'images/icon.ico' %}">
+            <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+          
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Glory:wght@500&display=swap" rel="stylesheet">
+
+            <style>
+                footer {
+              background-color: #343a40;
+              padding: 20px;
+              color: rgb(255, 255, 255);
+              display: grid;
+              grid-template-columns: repeat(5, 1fr);
+              gap: 20px;
+            }
+            
+            .footer-column {
+              margin-bottom: 20px;
+            }
+            
+            .footer-column h2 {
+              font-size: 18px;
+              margin-bottom: 5px;
+              font-family: 'Glory', sans-serif;
+            }
+            
+            .footer-column p {
+              font-size: 14px;
+            }
+            
+            .box {
+              width: 250px;
+              height: 50px;
+              padding: 10px;
+              margin-left: -20px;
+              border-color: black;
+            }
+            
+            .new-line {
+              clear: both;
+              margin-top: 20px;
+            }
+            
+            #language-select {
+              padding: 10px;
+              font-size: 16px;
+              border-radius: 4px;
+              border: 1px solid #a32020;
+              width: 200px;
+              color:rgb(20, 20, 27);
+            }
+            
+            .vertical-line {
+              width: 5px;
+              height: 160px;
+              /* Adjust the height as needed */
+              background-color: #0000006b;
+              /* Change the color of the vertical line */
+              margin-right: 20px;
+              /* Adjust the spacing around the vertical line */
+            }
+            .social-icons{
+              margin-top: 50px;
+              margin-left: 80px;
+            }
+            .box1 {
+              width: 350px;
+              height: 30px;
+              border: black;
+            }
+            
+            .hidden-text {
+              display: none;
+            }
+            
+            .highlight {
+              font-family: Arial, Helvetica, sans-serif;
+            }
+            
+            .highlight:hover {
+              background-color: rgb(174, 172, 167);
+              color: rgba(13, 12, 16, 0.914);
+              cursor: pointer;
+            }
+            
+            .footer-column ul {
+              list-style-type: none;
+              padding: 0;
+              margin: 0;
+              font-family: 'Glory', sans-serif;
+              font-size: large;
+            }
+            
+            .footer-column ul li {
+              font-size: 14px;
+              margin-bottom: 5px;
+              font-size: medium;
+              font-weight: 400;
+            }
+            
+            @media screen and (max-width: 768px) {
+              footer {
+                grid-template-columns: 1fr;
+              }
+            
+              .footer-column {
+                margin-bottom: 40px;
+              }
+            
+              .footer-column ul {
+                padding-left: 20px;
+              }
+            
+              .footer-column h2 {
+                margin-top: 20px;
+              }
+            
+              .box {
+                margin-left: 0;
+              }
+            
+              .footer-column .social-icons {
+                margin-left: 0;
+              }
+            }
+              </style>
+          
+            <script type="text/javascript">
+
+            var user = '{{request.user}}'
+
+            function getToken(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            var csrftoken = getToken('csrftoken')
+
+            function getCookie(name) {
+                // Split cookie string and get all individual name=value pairs in an array
+                var cookieArr = document.cookie.split(";");
+
+                // Loop through the array elements
+                for(var i = 0; i < cookieArr.length; i++) {
+                    var cookiePair = cookieArr[i].split("=");
+
+                    /* Removing whitespace at the beginning of the cookie name
+                    and compare it with the given string */
+                    if(name == cookiePair[0].trim()) {
+                        // Decode the cookie value and return
+                        return decodeURIComponent(cookiePair[1]);
+                    }
+                }
+
+                // Return null if not found
+                return null;
+            }
+		    var cart = JSON.parse(getCookie('cart'))
+
+            if (cart == undefined){
+                cart = {}
+                console.log('Cart Created!', cart)
+                document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+            }
+            console.log('Cart:', cart)
+
+            </script>
+     </head>
+     <body style="font-family: 'Glory', sans-serif;background:linear-gradient(black,grey,black);">
+
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a class="navbar-brand" href="{% url 'store' %}"><img width="50px" height="50px" src="{% static 'images/HAPPIBUYLOGO.png' %}" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">e-Commerce</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Categories 
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Fashion</a>
+                  <a class="dropdown-item" href="#">Sports Equipment</a>
+                  <a class="dropdown-item" href="#">Furniture</a>
+                  <a class="dropdown-item" href="#">Electronic gadgets</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Bank offers</a>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">New Releases</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">+ Subscription</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Help</a>
+              </li>
+              
+            </ul>
+            </ul>
+            <div class="form-inline my-2 my-lg-0">
+                {% if username %}
+                    <p style="color: aliceblue; font-size: large; margin-top: 8px;">Welcome, {{ username }}!</p>&nbsp;&nbsp;
+                    <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+                {% else %}
+                <a class="nav-link" href="#">Returns &<b>Orders</b></a>
+                    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>&nbsp;&nbsp;
+                    <a href="{% url 'signup' %}" class="btn btn-primary">Signup</a>
+                {% endif %}
+  
+                <a href="{% url 'cart' %}">
+                    <img  id="cart-icon" src="{% static 'images/cart.png' %}">
+                </a>
+                <p id="cart-total">{{ cartItems }}</p>
+            </div>
+          </div>
+        </nav>
+
+         <div class="container">
+                <br>
+                {% block content %}
+
+                 {% endblock content %}
+                <br>
+         </div>
+
+      <footer>
+        <div class="footer-column">
+            <h2><b>About</b></h2>
+            <div class="footer-row">
+              <ul>
+                <li>About us</li>
+                <li>Contact Us</li>
+                <li>Careers</li>
+                <li><span class="hidden-text">History</span></li>
+              </ul><br>
+            </div>
+            <br>
+                <div style="margin-right: 10px;" class="box" >
+                  <h2 class="highlight"><img src="https://img.etimg.com/thumb/msid-61127994,width-300,height-225,imgsize-99877,,resizemode-75/buying-gift-cards-this-diwali-choose-wisely.jpg" 
+                    alt="giftcardimage" height="35px" width="40px">&emsp13;&emsp13;<b>Check out gift cards</b></h2>
+                </div>
+                <div style="margin-left: -70px;" class="footer-column">
+                  <div class="social-icons">
+                  <h2><b>Reach out to us at:</b></h2>
+                  <a href="https://investor.fb.com/home/default.aspx" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Facebook_icon.svg/2048px-Facebook_icon.svg.png" height="40px" width="40px" alt="Facebook" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'"></a></li>
+                  &emsp;<a class="highlight" href="https://twitter.com/"  target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/124/124021.png" alt="Twitter" height="40px" width="40px" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'"></a></li>
+                  &emsp;<a  class="highlight" href="https://www.instagram.com/instagram/?hl=en" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1024px-Instagram_logo_2022.svg.png" height="40px" width="40px" alt="Instagram" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'"></a></li>
+                  &emsp;<a href="https://www.youtube.com/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/2560px-YouTube_full-color_icon_%282017%29.svg.png" alt="Youtube" height="40px" width="40px" onmouseover="this.style.filter='brightness(1.5)'" onmouseout="this.style.filter='brightness(1)'"></a></li>
+                  
+              </div>
+                </div><br><br>
+                <div class="box1">
+                        <p style="font-size: medium;font-weight: bolder; color: rgb(139, 142, 139); font-family: Arial, Helvetica, sans-serif;"  onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'"class="copyright">
+                          &copy; 2023 HappiHappiHappi. All rights reserved.
+                        </p>
+                      </div>
+                    
+              </div>
+          
+          
+          <div  style="margin-left: -90px;"  class="footer-column">
+            <h2 ><b>Contact</b></h2>
+            <div class="footer-row">
+              <ul>
+                <li>Payments</li>
+                <li>Shipping</li>
+                <li>Returns</li>
+                <li>FAQ</li>
+              </ul>
+            </div>
+            <div class="new-line">
+                <div class="box">
+                  <h2 class="highlight"><img src="https://www.nicepng.com/png/detail/513-5136986_call-centre-customer-service-computer-icons-technical-help.png"
+                     alt="helpcentrelogo" width="40px" height="35px">
+                    &emsp13;
+                    <b>Help Center</b></h2>
+                </div><br><br>
+              </div>
+          </div>
+          
+          <div style="margin-left: -90px;" class="footer-column">
+            <h2 ><b>Consumer Policy</b></h2>
+            <ul>
+              <li>Return Policy</li>
+              <li>Terms of Use</li>
+              <li>Security</li>
+              <li>Privacy</li>
+            </ul>
+          </div>
+          
+          <div class="footer-column">
+            <h2><b>Mail Us:</b></h2>
+            <ul>
+            <li style="font-size: large;"><a href="https://mail.google.com/mail/u/0/#inbox?compose=new" style="color: wheat;" target="_blank">e-com23@gmail.com</a></li>
+            <li style="font-size: large;"><a href="https://mail.google.com/mail/u/0/#inbox?compose=new" style="color: wheat;" target="_blank">e-com23@yahoo.com</a></li>
+            </ul>
+            <br><br><br>
+            <div class="new-line">
+                <div style="margin-left: -170px;" class="box"><br><br>
+                  <h2 ><b>We are available in: </b></h2>
+                  <div  class="image-container">
+                    <div style="display: flex; align-items: center;">
+                      <img src="https://www.activityvillage.co.uk/sites/default/files/images/india_flag_printables_av2.jpg" alt="India" height="30px" width="50px" style="margin-right: 10px;" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'">
+                      <img src="https://designerysigns.com/images/misc-pictures/free-printable-us-flag.jpg" alt="USA" height="30px" width="50px" style="margin-right: 10px;" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'">
+                      <img src="https://flaglane.com/download/british-flag/british-flag-graphic.png" alt="UK" height="30px" width="50px" style="margin-right: 10px;" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'">
+                      <img src="https://flaglane.com/download/australian-flag/australian-flag-graphic.png" alt="AUS" height="30px" width="50px" style="margin-right: 10px;" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'">
+                      <img src="https://flaglane.com/download/emirian-flag/emirian-flag-graphic.png" alt="UAE" height="30px" width="50px" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'">
+                  </div>
+                  
+                  </div>
+                </div>
+              </div>
+          </div>
+          
+          <div class="footer-column">
+            <h2><b>Office:</b></h2>
+            <h6>Address:</h6>
+            <p>STORE NO : 77 GANDIPET ONE COMPLEX , ABOVE LITTLE ITALY, NEAR OCEAN PARK, OSMAN SAGAR ROAD
+             &emsp; <a href="https://www.google.com/maps/place/Little+Italy+Kokapet/@17.385526,78.3309893,435m/data=!3m1!1e3!4m9!1m2!2m1!1sgandipet+complex!3m5!1s0x3bcb956e5bdcd96b:0x8c2237cc20874438!8m2!3d17.3855865!4d78.3302223!16s%2Fg%2F11kbp9rzrp?entry=ttu" target="_blank">
+            <img src="https://icon-library.com/images/google-maps-icon-transparent/google-maps-icon-transparent-4.jpg" alt="maplogo" height="40px" width="40px" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'"></a>
+            </p><br>
+            <h2><b>Phone Number:</b></h2>
+            <ul>
+              <li>7997555555</li>
+              <li>9100600000</li>
+              <li>7995656353</li>
+            </ul>
+            <div class="new-line">
+                <div class="box">
+                    <select onmouseover="this.style.filter='brightness(1)'" onmouseout="this.style.filter='brightness(1)'"id="language-select" style>
+                        <option value="">Choose Your Language</option>
+                        <option value="en">English</option>
+                        <option value="es">Telugu</option>
+                        <option value="fr">Hindi</option>
+                        <option value="de">Kannada</option>
+                      </select>
+                </div>
+              </div>
+          </div>
+        
+        </footer>
+
+      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+
+	    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+      <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+     </body>
+</html>
+
+
+
+
